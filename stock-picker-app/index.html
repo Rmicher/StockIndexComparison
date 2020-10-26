@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Stock Picker</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+  <link rel="stylesheet" href="./lib/css/styles.css">
+</head>
+
+<body>
+
+<div class="grid-container">
+  <div class="header">Stock Picker</div>
+  <div class="stock-menu">
+    <label for="myForm">Select a stock</label>
+    <form id="myForm">
+        <select id="selectStock">
+          <option></option>
+        </select>
+    </form>
+    <br>
+    <div class="stock-attribute" id="symbol">Symbol: </div>
+    <div class="stock-attribute" id="price">Price: </div>
+    <button type="button" id="AddToPortfolioButton">Add to Portfolio</button>
+  </div>
+  <div class="radarchart">Radar Chart</div>  
+  <div class="indexes">Similar Indexes</div>
+  <main class="stock-container">
+    <div class="stock-grid">
+      <div id="stock0" class="stock"></div>
+      <div id="stock1" class="stock"></div>
+      <div id="stock2" class="stock"></div>
+      <div id="stock3" class="stock"></div>
+      <div id="stock4" class="stock"></div>
+    </div>
+  </div>
+</div>
+
+<script src="./lib/js/main.js"></script>
+
+</body>
+</html>
