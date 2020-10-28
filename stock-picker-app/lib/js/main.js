@@ -1,5 +1,38 @@
 // TODO: stockDetails needs replaced with API data
-var stockDetails = [{"ticker": "AAPL", "price": "115.04"}, {"ticker": "GOOG", "price": "1641.00"}, {"ticker": "FB", "price": "284.79"}];
+
+
+// Get the current price of the selected stock from API. Can also return other current details if needed.
+var getQuote = function(selectedStock){
+	var url = "https://rapidapi.p.rapidapi.com/v6/finance/quote?symbols=" + selectedStock + "&region=US&lang=en"
+	const settings = {
+		"async": false,
+		"crossDomain": true,
+		"url": url,
+		"method": "GET",
+		"headers": {
+			"x-rapidapi-host": "yahoo-finance-low-latency.p.rapidapi.com",
+			"x-rapidapi-key": "8198243011msh1a3d727568558c2p143dbajsnc14d99ca25fc"
+		}
+	};
+	var response = $.ajax(settings).done(function (r) {});
+	var quote = response['responseJSON']['quoteResponse']["result"][0]["regularMarketPrice"];
+	return quote;
+};
+
+
+var stockDetails = [
+	{
+		"ticker": "AAPL", 
+		"price": "115.04"
+	}, 
+	{
+		"ticker": "GOOG", 
+		"price": "1641.00"}, 
+	{
+		"ticker": "FB",
+		"price": "284.79"
+	}
+];
 
 // Append the stock options to the dropdown
 var dropdown = document.getElementById("selectStock");
@@ -23,7 +56,7 @@ function showStockDetails(selectedStock){
   document.getElementById('symbol').innerHTML = "Symbol: " + selectedStock;
   for (var i = 0; i < stockDetails.length; i++) {
   	if (stockDetails[i].ticker == selectedStock)
-  	  document.getElementById('price').innerHTML = "Price: $" + stockDetails[i].price;
+      document.getElementById('price').innerHTML = "Price: $" + getQuote(selectedStock);
   }
 }
 
