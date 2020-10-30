@@ -57,13 +57,29 @@
     <div class="radarchart">Radar Chart</div>
     <div class="indexes">Similar Indexes</div>
     <main class="stock-container">
-      <div class="stock-grid">
+      <!-- <div class="stock-grid">
         <div id="stock0" class="stock"><text></text></div>
         <div id="stock1" class="stock"><text></text></div>
         <div id="stock2" class="stock"><text></text></div>
         <div id="stock3" class="stock"><text></text></div>
         <div id="stock4" class="stock"><text></text></div>
-      </div>
+      </div> -->
+      <div class="table">
+        <ul id="horizontal-listTitle">
+            <b><li></li></b>
+            <b><li></li></b>
+            <b><li></li></b>
+            <b><li></li></b>
+            <b><li></li></b>
+        </ul>
+        <ul id="horizontal-list">
+        <li><img src="money.jpg" alt="li_1" /></li>
+        <li><img src="money.jpg" alt="li_2" /></li>
+        <li><img src="money.jpg" alt="li_3" /></li>
+        <li><img src="money.jpg" alt="li_4" /></li>
+        <li><img src="money.jpg" alt="li_5" /></li>
+        </ul>
+    </div>
   </div>
   </div>
 
@@ -126,7 +142,7 @@
             .attr('class','select')
             .on('change',onchange)
         var color = d3.scale.ordinal()
-              .range(["#EDC951","#CC333F","#00A0B0","#1FD56C","#BD7AFF"]);
+              .range(["#EDC951","#CC333F","#FFFFFF","#1FD56C","#BD7AFF"]);
 
         var options = select
         .selectAll('option')
@@ -143,7 +159,11 @@
             // debugger;
             selected = selected.slice(Math.max(selected.length - 5, 0))
             var selectedObject = Object({'Tickers':selected})
-            AddStockDetailsGrid(selectValue, stockNumber++,color, selectedObject);
+            // AddStockDetailsGrid(selectValue, stockNumber++,color, selectedObject);
+            d3.selectAll('.table').select('#horizontal-listTitle')
+                .selectAll('li').each(function(d, i) {
+                    d3.select(this).style('color',color(i)).text(selectedObject.Tickers[i]);
+                    })
             updateRadar()
         };
 
