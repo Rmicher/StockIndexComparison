@@ -3,41 +3,218 @@
 
 <head>
   <title>Stock Picker</title>
-	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-	<meta content="utf-8" http-equiv="encoding">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
   <link rel="stylesheet" href="./lib/css/styles.css">
+  <style>
+  .table {
+    display: table;   /* Allow the centering to work */
+    margin: 0 auto;
+      }
+  
+      ul#horizontal-list {
+      min-width: 696px;
+    list-style: none;
+    padding-top: -2px;
+      }
+      
+    ul#horizontal-list li {
+      display: inline;
+      }
+  
+      ul#horizontal-listTitle {
+      min-width: 696px;
+    list-style: none;
+      padding-top: 10px;
+      }
+  
+      ul#horizontal-listTitle li {
+          display: inline-block;
+          width: 150px;
+      }
+    </style>
 </head>
 
 <body>
-
-<div class="grid-container">
-  <div class="header">Stock Picker</div>
-  <div class="stock-menu">
-    <label for="myForm">Select a stock</label>
-    <form id="myForm">
+  <script src="radar.js"></script>
+  <div class="grid-container">
+    <div class="header">Stock Picker</div>
+    <div class="stock-menu">
+      <label for="myForm">Select a stock</label>
+      <form id="myForm">
         <select id="selectStock">
           <option></option>
         </select>
-    </form>
-    <br>
-    <div class="stock-attribute" id="symbol">Symbol: </div>
-    <div class="stock-attribute" id="price">Price: </div>
-    <button type="button" id="AddToPortfolioButton">Add to Portfolio</button>
-  </div>
-  <div class="radarchart">Radar Chart</div>  
-  <div class="indexes">Similar Indexes</div>
-  <main class="stock-container">
-    <div class="stock-grid">
-      <div id="stock0" class="stock"></div>
-      <div id="stock1" class="stock"></div>
-      <div id="stock2" class="stock"></div>
-      <div id="stock3" class="stock"></div>
-      <div id="stock4" class="stock"></div>
+      </form>
+      <br>
+      <div class="stock-attribute" id="symbol">Symbol: </div>
+      <div class="stock-attribute" id="price">Price: </div>
+      <button type="button" id="AddToPortfolioButton">Add to Portfolio</button>
+      <div class="important-factors">Important Factors
+        <select id="selectFactors"></select>
+      </div>
     </div>
+    <div class="radarchart">Radar Chart</div>
+    <div class="indexes">Similar Indexes</div>
+    <main class="stock-container">
+      <div class="stock-grid">
+        <div id="stock0" class="stock"><text></text></div>
+        <div id="stock1" class="stock"><text></text></div>
+        <div id="stock2" class="stock"><text></text></div>
+        <div id="stock3" class="stock"><text></text></div>
+        <div id="stock4" class="stock"><text></text></div>
+      </div>
   </div>
-</div>
+  </div>
 
-<script src="./lib/js/main.js"></script>
+  <script src="./lib/js/main.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300" rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="lib/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+  
+  <script>
+      
+    /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+    
+          ////////////////////////////////////////////////////////////// 
+          //////////////////////// Set-Up ////////////////////////////// 
+          ////////////////////////////////////////////////////////////// 
+
+          var margin = {top: 100, right: 150, bottom: 100, left: 150},
+              width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+              height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+                  
+          ////////////////////////////////////////////////////////////// 
+          ////////////////////////// Data ////////////////////////////// 
+          ////////////////////////////////////////////////////////////// 
+
+        d3.json("radarMockData.json",function(data){
+
+
+        function formatEntries(data) {
+            var formattedEntries = []
+            var tickerNamesOrdered = []
+            data.forEach(function(d) {
+                var numericalAttributes = []
+                var tickerName = ""
+                var dataArray = Object.keys(d).map(function(key, i) {
+                    if (i>0) {
+                        numericalAttributes.push([key, d[key]])
+                    } else {
+                        tickerName = d[key]
+                        tickerNamesOrdered.push(d[key])
+                    }
+                });
+                var dataMap = numericalAttributes.map((key) => Object({'axis':key[0], 'value':key[1]}));
+                // debugger;
+                formattedEntries.push(dataMap)
+            });
+
+            return [formattedEntries, tickerNamesOrdered];
+        }
+        // debugger;
+        var response = formatEntries(data);
+        var dataformatted = response[0];
+        var tickerNamesOrdered  = response[1];
+
+        // var data = ["Option 1", "Option 2", "Option 3"];
+        
+
+        var select = d3.select('body')
+        .select('#selectStock')
+            .attr('class','select')
+            .on('change',onchange)
+        var color = d3.scale.ordinal()
+              .range(["#EDC951","#CC333F","#00A0B0","#1FD56C","#BD7AFF"]);
+
+        var options = select
+        .selectAll('option')
+            .data(tickerNamesOrdered).enter()
+            .append('option')
+                .text(function (d) { return d; });
+
+        var selected = []
+        var stockNumber = 0;
+        function onchange() {
+          // debugger;
+            selectValue = d3.select('body').select('#selectStock').property('value');
+            selected.push(selectValue)
+            // debugger;
+            selected = selected.slice(Math.max(selected.length - 5, 0))
+            var selectedObject = Object({'Tickers':selected})
+            AddStockDetailsGrid(selectValue, stockNumber++,color, selectedObject);
+            updateRadar()
+        };
+
+         var allAxis = (dataformatted[0].map(function(i, j){return i.axis}))
+        // debugger;
+
+        d3.select('body').select("#AddToPortfolioButton").onclick = onchange;
+
+        var selectAxis = d3.select('body')
+        .select("#selectFactors")
+        // .append('select')
+            .attr('class','select')
+            // .attr('id','axis-names')
+            .on('change',onAxischange)
+
+
+        var optionsAxis = selectAxis
+        .selectAll('option')
+            .data(allAxis).enter()
+            .append('option')
+                .text(function (d) { return d; });
+
+        var selectedAxis = []
+
+        function updateRadar() {
+          // debugger;
+        selectedAxis = selectedAxis.slice(Math.max(selectedAxis.length - 5, 0))
+            var overallData = []
+            dataformatted.map(function(d, i) {
+                if (selected.indexOf(tickerNamesOrdered[i]) >= 0){
+                    var specialData = []
+                    d.forEach(function(ax) {
+                        if (selectedAxis.indexOf(ax.axis) >= 0){
+                        specialData.push(ax)
+                        }
+                    })
+                    overallData.push(specialData)
+                }
+            })
+            RadarChart(".radarchart", overallData, radarChartOptions);
+        }
+
+        function onAxischange() {
+            // debugger;
+            var selectAxisValue = d3.select('body').select('#selectFactors').property('value');
+            // debugger;
+            selectedAxis.push(selectAxisValue)
+            updateRadar()
+        };
+
+        
+
+          ////////////////////////////////////////////////////////////// 
+          //////////////////// Draw the Chart ////////////////////////// 
+          ////////////////////////////////////////////////////////////// 
+
+              
+          var radarChartOptions = {
+            w: width,
+            h: height,
+            margin: margin,
+            maxValue: 0.5,
+            levels: 5,
+            roundStrokes: true,
+            color: color
+          };
+          //Call function to draw the Radar chart
+          RadarChart(".radarchart", dataformatted, radarChartOptions);
+        })
+    </script>
 
 </body>
+
 </html>
