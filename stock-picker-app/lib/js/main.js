@@ -1,5 +1,18 @@
 // TODO: stockDetails needs replaced with API data
-var stockDetails = [{"ticker": "AAPL", "price": "115.04"}, {"ticker": "GOOG", "price": "1641.00"}, {"ticker": "FB", "price": "284.79"}];
+
+var stockDetails = [
+	{
+		"ticker": "AAPL", 
+		"price": "115.04"
+	}, 
+	{
+		"ticker": "GOOG", 
+		"price": "1641.00"}, 
+	{
+		"ticker": "FB",
+		"price": "284.79"
+	}
+];
 
 // // Append the stock options to the dropdown
 // var dropdown = document.getElementById("selectStock");
@@ -23,7 +36,7 @@ function showStockDetails(selectedStock){
   document.getElementById('symbol').innerHTML = "Symbol: " + selectedStock;
   for (var i = 0; i < stockDetails.length; i++) {
   	if (stockDetails[i].ticker == selectedStock)
-  	  document.getElementById('price').innerHTML = "Price: $" + stockDetails[i].price;
+      document.getElementById('price').innerHTML = "Price: $" + getQuote(selectedStock);
   }
 }
 
