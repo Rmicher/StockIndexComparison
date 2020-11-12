@@ -22,23 +22,38 @@
     <div class="stock-attribute" id="symbol">Symbol: </div>
     <div class="stock-attribute" id="previousClose">Previous Close: </div>
     <div class="stock-attribute" id="beta">Beta: </div>
-    <div class="stock-attribute" id="environmentScore">Environmental Score: </div>
+    <div class="stock-attribute" id="environmentScore">Environment Score: </div>
     <div class="stock-attribute" id="governanceScore">Governance Score: </div>
     <div class="stock-attribute" id="socialScore">Social Score: </div>
     <div class="stock-attribute" id="yield">Yield: </div>
     <div class="stock-attribute" id="ytdReturn">YTD Return: </div>
     <div class="slide-container">
-    	Percentage of Portfolio
+    	Portfolio Allocation
 		<input type="range" min="1" max="100" value="50" class="slider" id="sliderRange">
 		<span id="rangeValue"></span>
 	</div>
     <button type="button" id="AddToPortfolioButton">Add to Portfolio</button>
   </div>
   <div class="radarchart">Radar Chart</div>  
-  <div class="indexes">Similar Indexes</div>
+  <div class="indexes">Similar Indexes
+    <form class="form-attribute" id="myForm">
+        <select id="selectIndex">
+          <option></option>
+        </select>
+    </form>
+    <div class="stock-attribute" id="symbolIndex">Symbol: </div>
+    <div class="stock-attribute" id="previousCloseIndex">Previous Close: </div>
+    <div class="stock-attribute" id="betaIndex">Beta: </div>
+    <div class="stock-attribute" id="environmentScoreIndex">Environment Score: </div>
+    <div class="stock-attribute" id="governanceScoreIndex">Governance Score: </div>
+    <div class="stock-attribute" id="socialScoreIndex">Social Score: </div>
+    <div class="stock-attribute" id="yieldIndex">Yield: </div>
+    <div class="stock-attribute" id="ytdReturnIndex">YTD Return: </div>
+  </div>
   <main class="stock-container">
+  	<div class="portfolio" id="portfolio">Portfolio</div>
     <div class="stock-grid">
-      <div id="stock0" class="stock"></div>
+      <div id="stock0" class="stock"><button type="button" id="button0" >Remove</button></div>
       <div id="stock1" class="stock"></div>
       <div id="stock2" class="stock"></div>
       <div id="stock3" class="stock"></div>
@@ -48,7 +63,8 @@
 </div>
 
 <script src="./lib/js/jquery-3.5.1.min.js"></script>
-<script src="./lib/data/stocks_simple.js"></script>
+<script src="./lib/data/StocksSimple.js"></script>
+<script src="./lib/data/IndexSimple.js"></script>
 <script src="./lib/js/api.js"></script>
 <script src="./lib/js/algorithm.js"></script>
 <script src="./lib/js/main.js"></script>
