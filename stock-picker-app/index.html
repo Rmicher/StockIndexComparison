@@ -2,84 +2,130 @@
 <html>
 
 <head>
-  <title>Stock Picker</title>
+  <title>Create a Custom Stock Portfolio</title>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
   <link rel="stylesheet" href="./lib/css/styles.css">
   <style>
-  .table {
-    display: table;   /* Allow the centering to work */
-    margin: 0 auto;
-      }
-  
-      ul#horizontal-list {
+    .table {
+      display: table;
+      /* Allow the centering to work */
+      margin: 0 auto;
+    }
+
+    ul#horizontal-list {
       min-width: 696px;
-    list-style: none;
-    padding-top: -2px;
-      }
-      
+      list-style: none;
+      padding-top: -2px;
+    }
+
     ul#horizontal-list li {
       display: inline;
-      }
-  
-      ul#horizontal-listTitle {
+    }
+
+    ul#horizontal-listTitle {
       min-width: 696px;
-    list-style: none;
+      list-style: none;
       padding-top: 10px;
-      }
-  
-      ul#horizontal-listTitle li {
-          display: inline-block;
-          width: 150px;
-      }
-    </style>
+    }
+
+    ul#horizontal-listTitle li {
+      display: inline-block;
+      width: 150px;
+    }
+  </style>
 </head>
 
 <body>
-  <script src="radar.js"></script>
+
   <div class="grid-container">
-    <div class="header">Stock Picker</div>
+    <div class="header">Create a Custom Stock Portfolio</div>
     <div class="stock-menu">
-      <label for="myForm">Select a stock</label>
-      <form id="myForm">
+      <label for="myForm">Select a Stock</label>
+      <form class="form-attribute" id="myForm">
         <select id="selectStock">
           <option></option>
         </select>
       </form>
-      <br>
       <div class="stock-attribute" id="symbol">Symbol: </div>
-      <div class="stock-attribute" id="price">Price: </div>
+      <div class="stock-attribute" id="previousClose">Previous Close: </div>
+      <div class="stock-attribute" id="beta">Beta: </div>
+      <div class="stock-attribute" id="environmentScore">Environment Score: </div>
+      <div class="stock-attribute" id="governanceScore">Governance Score: </div>
+      <div class="stock-attribute" id="socialScore">Social Score: </div>
+      <div class="stock-attribute" id="yield">Yield: </div>
+      <div class="stock-attribute" id="ytdReturn">YTD Return: </div>
+      <div class="slide-container">
+        Portfolio Allocation
+        <input type="range" min="1" max="100" value="50" class="slider" id="sliderRange">
+        <span id="rangeValue"></span>
+      </div>
       <button type="button" id="AddToPortfolioButton">Add to Portfolio</button>
       <div class="important-factors">Important Factors
         <select id="selectFactors"></select>
       </div>
     </div>
     <div class="radarchart">Radar Chart</div>
-    <div class="indexes">Similar Indexes</div>
+    <div class="indexes">Similar Indexes
+      <form class="form-attribute" id="myForm">
+        <select id="selectIndex">
+          <option></option>
+        </select>
+      </form>
+      <div class="stock-attribute" id="symbolIndex">Symbol: </div>
+      <div class="stock-attribute" id="previousCloseIndex">Previous Close: </div>
+      <div class="stock-attribute" id="betaIndex">Beta: </div>
+      <div class="stock-attribute" id="environmentScoreIndex">Environment Score: </div>
+      <div class="stock-attribute" id="governanceScoreIndex">Governance Score: </div>
+      <div class="stock-attribute" id="socialScoreIndex">Social Score: </div>
+      <div class="stock-attribute" id="yieldIndex">Yield: </div>
+      <div class="stock-attribute" id="ytdReturnIndex">YTD Return: </div>
+    </div>
     <main class="stock-container">
-      <!-- <div class="stock-grid">
+      <div class="portfolio" id="portfolio">Portfolio</div>
+      <div class="stock-grid">
+        <div id="stock0" class="stock"><button type="button" id="button0">Remove</button></div>
+        <div id="stock1" class="stock"></div>
+        <div id="stock2" class="stock"></div>
+        <div id="stock3" class="stock"></div>
+        <div id="stock4" class="stock"></div>
+      </div>
+      <div class="radarchart">Radar Chart</div>
+      <div class="indexes">Similar Indexes</div>
+    </main class="stock-container">
+        <!-- <div class="stock-grid">
         <div id="stock0" class="stock"><text></text></div>
         <div id="stock1" class="stock"><text></text></div>
         <div id="stock2" class="stock"><text></text></div>
         <div id="stock3" class="stock"><text></text></div>
         <div id="stock4" class="stock"><text></text></div>
       </div> -->
-      <div class="table">
-        <ul id="horizontal-listTitle">
-            <b><li></li></b>
-            <b><li></li></b>
-            <b><li></li></b>
-            <b><li></li></b>
-            <b><li></li></b>
-        </ul>
-        <ul id="horizontal-list">
-        <li><img src="money.jpg" alt="li_1" /></li>
-        <li><img src="money.jpg" alt="li_2" /></li>
-        <li><img src="money.jpg" alt="li_3" /></li>
-        <li><img src="money.jpg" alt="li_4" /></li>
-        <li><img src="money.jpg" alt="li_5" /></li>
-        </ul>
-    </div>
+        <!-- <div class="table">
+          <ul id="horizontal-listTitle">
+            <b>
+              <li></li>
+            </b>
+            <b>
+              <li></li>
+            </b>
+            <b>
+              <li></li>
+            </b>
+            <b>
+              <li></li>
+            </b>
+            <b>
+              <li></li>
+            </b>
+          </ul>
+          <ul id="horizontal-list">
+            <li><img src="money.jpg" alt="li_1" /></li>
+            <li><img src="money.jpg" alt="li_2" /></li>
+            <li><img src="money.jpg" alt="li_3" /></li>
+            <li><img src="money.jpg" alt="li_4" /></li>
+            <li><img src="money.jpg" alt="li_5" /></li>
+          </ul>
+        </div> -->
   </div>
   </div>
 
@@ -88,156 +134,140 @@
   <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
   <script type="text/javascript" src="lib/d3.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
-  
+  <script src="./lib/js/jquery-3.5.1.min.js"></script>
+  <script src="./lib/data/StocksSimple.js"></script>
+  <script src="./lib/data/IndexSimple.js"></script>
+  <script src="./lib/js/api.js"></script>
+  <script src="./lib/js/algorithm.js"></script>
+  <script src="./lib/js/main.js"></script>
+  <script src="./lib/js/radar.js"></script>
   <script>
-      
+
     /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
-    
-          ////////////////////////////////////////////////////////////// 
-          //////////////////////// Set-Up ////////////////////////////// 
-          ////////////////////////////////////////////////////////////// 
 
-          var margin = {top: 100, right: 150, bottom: 100, left: 150},
-              width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
-              height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
-                  
-          ////////////////////////////////////////////////////////////// 
-          ////////////////////////// Data ////////////////////////////// 
-          ////////////////////////////////////////////////////////////// 
+    ////////////////////////////////////////////////////////////// 
+    //////////////////////// Set-Up ////////////////////////////// 
+    ////////////////////////////////////////////////////////////// 
 
-        d3.json("radarMockData.json",function(data){
+    var margin = { top: 100, right: 150, bottom: 100, left: 150 },
+      width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+      height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
 
+    ////////////////////////////////////////////////////////////// 
+    ////////////////////////// Data ////////////////////////////// 
+    ////////////////////////////////////////////////////////////// 
+    d3.json("lib/data/Index_Simple.json", function(indexJSON) {
+    d3.json("lib/data/Stocks_Simple.json", function (stockJSON) {
+      var data = stockJSON
 
-        function formatEntries(data) {
-            var formattedEntries = []
-            var tickerNamesOrdered = []
-            data.forEach(function(d) {
-                var numericalAttributes = []
-                var tickerName = ""
-                var dataArray = Object.keys(d).map(function(key, i) {
-                    if (i>0) {
-                        numericalAttributes.push([key, d[key]])
-                    } else {
-                        tickerName = d[key]
-                        tickerNamesOrdered.push(d[key])
-                    }
-                });
-                var dataMap = numericalAttributes.map((key) => Object({'axis':key[0], 'value':key[1]}));
-                // debugger;
-                formattedEntries.push(dataMap)
-            });
-
-            return [formattedEntries, tickerNamesOrdered];
-        }
-        // debugger;
-        var response = formatEntries(data);
-        var dataformatted = response[0];
-        var tickerNamesOrdered  = response[1];
-
-        // var data = ["Option 1", "Option 2", "Option 3"];
-        
-
-        var select = d3.select('body')
-        .select('#selectStock')
-            .attr('class','select')
-            .on('change',onchange)
-        var color = d3.scale.ordinal()
-              .range(["#EDC951","#CC333F","#FFFFFF","#1FD56C","#BD7AFF"]);
-
-        var options = select
-        .selectAll('option')
-            .data(tickerNamesOrdered).enter()
-            .append('option')
-                .text(function (d) { return d; });
-
-        var selected = []
-        var stockNumber = 0;
-        function onchange() {
+      function formatEntries(data) {
+        var formattedEntries = []
+        var tickerNamesOrdered = []
+        data.forEach(function (d) {
+          var numericalAttributes = []
+          var tickerName = ""
+          var dataArray = Object.keys(d).map(function (key, i) {
+            if (i > 0) {
+              numericalAttributes.push([key, d[key]])
+            } else {
+              tickerName = d[key]
+              tickerNamesOrdered.push(d[key])
+            }
+          });
+          var dataMap = numericalAttributes.map((key) => Object({ 'axis': key[0], 'value': key[1] }));
           // debugger;
-            selectValue = d3.select('body').select('#selectStock').property('value');
-            selected.push(selectValue)
-            // debugger;
-            selected = selected.slice(Math.max(selected.length - 5, 0))
-            var selectedObject = Object({'Tickers':selected})
-            // AddStockDetailsGrid(selectValue, stockNumber++,color, selectedObject);
-            d3.selectAll('.table').select('#horizontal-listTitle')
-                .selectAll('li').each(function(d, i) {
-                    d3.select(this).style('color',color(i)).text(selectedObject.Tickers[i]);
-                    })
-            updateRadar()
-        };
+          formattedEntries.push(dataMap)
+        });
 
-         var allAxis = (dataformatted[0].map(function(i, j){return i.axis}))
-        // debugger;
+        return [formattedEntries, tickerNamesOrdered];
+      }
+      // debugger;
+      var response = formatEntries(data);
+      var dataformatted = response[0];
+      var tickerNamesOrdered = response[1];
 
-        d3.select('body').select("#AddToPortfolioButton").onclick = onchange;
+      // var data = ["Option 1", "Option 2", "Option 3"];
 
-        var selectAxis = d3.select('body')
+
+      var select = d3.select('body')
+        .select('#selectStock')
+        .attr('class', 'select')
+        // .on('change', onchange)
+      var color = d3.scale.ordinal()
+        .range(["#EDC951", "#CC333F", "#FFFFFF", "#1FD56C", "#BD7AFF"]);
+
+      var options = select
+        .selectAll('option')
+        .data(tickerNamesOrdered).enter()
+        .append('option')
+        .text(function (d) { return d; });
+
+      var selected = []
+      var stockNumber = 0;
+      // function onchange() {
+      //   // debugger;
+      //   selectValue = d3.select('body').select('#selectStock').property('value');
+      //   selected.push(selectValue)
+      //   // debugger;
+      //   selected = selected.slice(Math.max(selected.length - 5, 0))
+      //   var selectedObject = Object({ 'Tickers': selected })
+      //   // AddStockDetailsGrid(selectValue, stockNumber++,color, selectedObject);
+        
+      //     updateRadar()
+      // };
+
+      var allAxis = (dataformatted[0].map(function (i, j) { return i.axis }))
+      // debugger;
+
+      d3.select('body').select("#AddToPortfolioButton").on('click', onClickAddToPortfolioButton);
+
+      var selectAxis = d3.select('body')
         .select("#selectFactors")
         // .append('select')
-            .attr('class','select')
-            // .attr('id','axis-names')
-            .on('change',onAxischange)
+        .attr('class', 'select')
+        // .attr('id','axis-names')
+        .on('change', onAxischange)
 
 
-        var optionsAxis = selectAxis
+      var optionsAxis = selectAxis
         .selectAll('option')
-            .data(allAxis).enter()
-            .append('option')
-                .text(function (d) { return d; });
+        .data(allAxis).enter()
+        .append('option')
+        .text(function (d) { return d; });
 
-        var selectedAxis = []
+      var selectedAxis = []
 
-        function updateRadar() {
-          // debugger;
-        selectedAxis = selectedAxis.slice(Math.max(selectedAxis.length - 5, 0))
-            var overallData = []
-            dataformatted.map(function(d, i) {
-                if (selected.indexOf(tickerNamesOrdered[i]) >= 0){
-                    var specialData = []
-                    d.forEach(function(ax) {
-                        if (selectedAxis.indexOf(ax.axis) >= 0){
-                        specialData.push(ax)
-                        }
-                    })
-                    overallData.push(specialData)
-                }
-            })
-            RadarChart(".radarchart", overallData, radarChartOptions);
-        }
+      function onAxischange() {
+        // debugger;
+        var selectAxisValue = d3.select('body').select('#selectFactors').property('value');
+        // debugger;
+        selectedAxis.push(selectAxisValue)
+        // debugger;
+        updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOptions)
+      };
 
-        function onAxischange() {
-            // debugger;
-            var selectAxisValue = d3.select('body').select('#selectFactors').property('value');
-            // debugger;
-            selectedAxis.push(selectAxisValue)
-            updateRadar()
-        };
 
-        
 
-          ////////////////////////////////////////////////////////////// 
-          //////////////////// Draw the Chart ////////////////////////// 
-          ////////////////////////////////////////////////////////////// 
+      ////////////////////////////////////////////////////////////// 
+      //////////////////// Draw the Chart ////////////////////////// 
+      ////////////////////////////////////////////////////////////// 
 
-              
-          var radarChartOptions = {
-            w: width,
-            h: height,
-            margin: margin,
-            maxValue: 0.5,
-            levels: 5,
-            roundStrokes: true,
-            color: color
-          };
-          //Call function to draw the Radar chart
-          RadarChart(".radarchart", dataformatted, radarChartOptions);
-        })
-    </script>
-<script src="./lib/js/jquery-3.5.1.min.js"></script>
-<script src="./lib/js/api.js"></script>
-<script src="./lib/js/algorithm.js"></script>
-<script src="./lib/js/main.js"></script>
+
+      var radarChartOptions = {
+        w: width,
+        h: height,
+        margin: margin,
+        maxValue: 0.5,
+        levels: 5,
+        roundStrokes: true,
+        color: color
+      };
+      //Call function to draw the Radar chart
+      // debugger;
+      RadarChart(".radarchart", dataformatted, radarChartOptions);
+    })})
+  </script>
+
 
 </body>
 
