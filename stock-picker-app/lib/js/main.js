@@ -1,15 +1,6 @@
 // Append the stock options to the dropdown
 var dropdown = document.getElementById("selectStock");
 
-// import stockJSON from "../data/Stocks_Simple.json";
-
-// for (var stock in stockJSON) {
-//   var option = document.createElement("option");
-//   option.textContent = stock;
-//   option.value = stock;
-//   dropdown.appendChild(option);
-// }
-
 // Event listener for the stock dropdown
 dropdown.addEventListener("change", onSelectChange);
 function onSelectChange() {
