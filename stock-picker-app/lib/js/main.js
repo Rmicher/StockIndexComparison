@@ -93,7 +93,6 @@ function onClickAddToPortfolioButton() {
     var stockNumber = listOfSelectedStocks.length - 1
     AddStockDetailsGrid(selectedStock, percentageValue, stockNumber);
     updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions)
-    // TODO: createRadarGraph()
     // TODO: findSimilarIndexes()
   }
 }
@@ -141,7 +140,6 @@ function onSelectChangeIndex() {
 }
 
 function updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOptions) {
-  // debugger;
   var selectedAxi = selectedAxis.slice(Math.max(selectedAxis.length - 5, 0))
   selectedAxisTracker = selectedAxi
   var overallData = []
@@ -151,7 +149,6 @@ function updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOpt
   orderedTickers = tickerNamesOrdered
   radarOptions = radarChartOptions
   dataformatted.map(function (d, i) {
-    // debugger;
     if (listOfSelectedTickers.includes(tickerNamesOrdered[i])) {
       var specialData = []
       d.forEach(function (ax) {
