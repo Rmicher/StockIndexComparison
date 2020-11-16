@@ -33,7 +33,7 @@ function similarity(portfolioScores, indexScores){
 	
 	var diffs = [];
 	for (var i=1; i < n_properties; i++) {
-		diffs.push(relativeDifference(portfolioValues[i], indexValues[i]))
+		diffs.push(relativeDifference(portfolioValues[i], indexValues[i])**2)
 	};
 	var totalScore = 0;
 	for (var i=0; i < diffs.length; i++){
