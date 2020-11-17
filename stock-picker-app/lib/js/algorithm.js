@@ -61,18 +61,20 @@ function calculatePortfolioAverages(portfolio){
 	*/
 	
 	// Get attribute names
-	attributes = Object.keys(portfolio[0]).slice(2,);  // skips ticker and weight to get to attributes
+	attributes = Object.keys(portfolio[0]);  // skips ticker and weight to get to attributes
 	
 	// for each attribute in attribute names, get the average from portfolio, and add attribute-value to portfolioAverages dictionary
 	portfolioAverages = {};
 	for (var i=0; i < attributes.length; i++){
 		attribute = attributes[i];
-		attributeWeightedAverage = 0;
-		for (var j=0; j < portfolio.length; j++){
-			weighting = portfolio[j]["weight"]
-			attributeWeightedAverage += portfolio[j][attribute] * weighting
-		};
-		portfolioAverages[attribute] = attributeWeightedAverage;
+		if (attribute != "ticker" && attribute != "weight") {
+			attributeWeightedAverage = 0;
+			for (var j=0; j < portfolio.length; j++){
+				weighting = portfolio[j]["weight"]
+				attributeWeightedAverage += portfolio[j][attribute] * weighting
+			};
+			portfolioAverages[attribute] = attributeWeightedAverage;
+		}
 	}
 	return portfolioAverages;
 };
@@ -86,24 +88,23 @@ function calculatePortfolioAverages(portfolio){
 var indexList = getIndexList(); */
 	
 
-function rankIndices(portfolioAverages, indexList){
+function rankIndices(portfolio, indexList){
 	/*
 	Ranks indices by similarity to portfolio.
 	
 	Inputs:
-		- portfolioAverages (dictionary): contains selected attribute names as keys with weighted average values of each attribute.
+		- portfolio (dictionary): contains selected attribute names as keys with weighted average values of each attribute.
 		- index_list (list of dictionaries): similar to portfolio except stocks are replaced with indices and no 'weight' attribute exists.
 		
 	Outputs:
 		- rankedIndices (list of lists): list containing [indexName, similarityScore] for each index, sorted by similarity score (highest first)
 	*/
-	console.log("rankIndices");
 	// Initiate holder for indices which will be placed in order of highest similarity score
 	unrankedIndices = [];
+	var portfolioAverages;
 	
 	// calculate the weighted average for each attribute in portfolio and save to dictionary where each attribute is a key
 	portfolioAverages = calculatePortfolioAverages(portfolio);
-	
 	// Compare similarity of each index with the portfolio and add index with score to list of unranked indices
 	portfolioAttributes = Object.keys(portfolioAverages);
 	for (var i=0; i < indexList.length; i++){
@@ -116,7 +117,6 @@ function rankIndices(portfolioAverages, indexList){
 		similarityScore = similarity(portfolioAverages, indexSubset);
 		unrankedIndices.push([indexName, similarityScore]);
 	};
-		
 	// Sort indices with largest similarity score first
     rankedIndices = unrankedIndices.sort(function(a, b){return b[1]-a[1];});
 

@@ -32,9 +32,8 @@ slider.oninput = function () {
 }
 
 // Add stock to radar graph and to bottom row of grid when button is clicked
-// document.getElementById("AddToPortfolioButton").onclick = onClickAddToPortfolioButton;
-// var stockNumber = 0;
 var listOfSelectedStocks = [];
+var listOfIndexes = [];
 var totalPercentage = 0; //cannot exceed 100
 var portfolio = document.getElementById('portfolio');
 var color = d3.scale.ordinal()
@@ -44,6 +43,11 @@ var formattedData = 0;
 var orderedTickers = []
 var radarOptions = {}
 var dropdownIndex = document.getElementById("selectIndex");
+
+// Clean index data
+for (var index in indexJSON) {
+  listOfIndexes.push(indexJSON[index]);
+}
 
 function onClickAddToPortfolioButton() {
 
@@ -84,9 +88,9 @@ function onClickAddToPortfolioButton() {
     portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
     var stockNumber = listOfSelectedStocks.length - 1
     AddStockDetailsGrid(selectedStock, percentageValue, stockNumber);
-    updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
-    rankedIndices = rankIndices(listOfSelectedStocks, indexJSON);
+    rankedIndices = rankIndices(listOfSelectedStocks, listOfIndexes);
     createIndexDropdown(rankedIndices);
+    updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
   }
 }
 
@@ -112,20 +116,22 @@ function onClickRemoveFromPortfolioButton() {
   totalPercentage = totalPercentage - listOfSelectedStocks.slice(-1)[0].weight;
   portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
   listOfSelectedStocks.pop();
-  updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
-  rankedIndices = rankIndices(listOfSelectedStocks, indexJSON);
+  rankedIndices = rankIndices(listOfSelectedStocks, listOfIndexes);
   createIndexDropdown(rankedIndices);
+  updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
 }
 
 function createIndexDropdown(rankedIndices) {
+  dropdownIndex.innerHTML = "";
   // Append the index options to the dropdown
   for (var i=0; i < rankedIndices.length; i++) {
-  	console.log(rankedIndices[i].ticker);
+  	var index = rankedIndices[i][0];
     var option = document.createElement("option");
-    option.textContent = rankedIndices[i].ticker;
-    option.value = rankedIndices[i].ticker;
+    option.textContent = (i + 1) + ". " + indexJSON[index].ticker;
+    option.value = indexJSON[index].ticker;
     dropdownIndex.appendChild(option);
   }
+  showIndexDetails(rankedIndices[0][0]);
 }
 
 // Event listener for the index dropdown
