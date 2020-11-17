@@ -97,7 +97,7 @@ function rankIndices(portfolioAverages, indexList){
 	Outputs:
 		- rankedIndices (list of lists): list containing [indexName, similarityScore] for each index, sorted by similarity score (highest first)
 	*/
-	
+	console.log("rankIndices");
 	// Initiate holder for indices which will be placed in order of highest similarity score
 	unrankedIndices = [];
 	

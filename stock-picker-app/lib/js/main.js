@@ -43,6 +43,7 @@ var selectedAxisTracker = [];
 var formattedData = 0;
 var orderedTickers = []
 var radarOptions = {}
+var dropdownIndex = document.getElementById("selectIndex");
 
 function onClickAddToPortfolioButton() {
 
@@ -83,8 +84,9 @@ function onClickAddToPortfolioButton() {
     portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
     var stockNumber = listOfSelectedStocks.length - 1
     AddStockDetailsGrid(selectedStock, percentageValue, stockNumber);
-    updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions)
-    // TODO: findSimilarIndexes()
+    updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
+    rankedIndices = rankIndices(listOfSelectedStocks, indexJSON);
+    createIndexDropdown(rankedIndices);
   }
 }
 
@@ -110,17 +112,20 @@ function onClickRemoveFromPortfolioButton() {
   totalPercentage = totalPercentage - listOfSelectedStocks.slice(-1)[0].weight;
   portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
   listOfSelectedStocks.pop();
-  updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions)
+  updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
+  rankedIndices = rankIndices(listOfSelectedStocks, indexJSON);
+  createIndexDropdown(rankedIndices);
 }
 
-// TODO: this will be replaced by the aarray returned by the algorithm
-// Append the index options to the dropdown
-var dropdownIndex = document.getElementById("selectIndex");
-for (var index in indexJSON) {
-  var option = document.createElement("option");
-  option.textContent = index;
-  option.value = index;
-  dropdownIndex.appendChild(option);
+function createIndexDropdown(rankedIndices) {
+  // Append the index options to the dropdown
+  for (var i=0; i < rankedIndices.length; i++) {
+  	console.log(rankedIndices[i].ticker);
+    var option = document.createElement("option");
+    option.textContent = rankedIndices[i].ticker;
+    option.value = rankedIndices[i].ticker;
+    dropdownIndex.appendChild(option);
+  }
 }
 
 // Event listener for the index dropdown
@@ -154,7 +159,6 @@ function updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOpt
 }
 
 // Show details for the index
-// showIndexDetails("VTSAX");
 function showIndexDetails(selectedIndex) {
   document.getElementById('symbolIndex').innerHTML = "Symbol: " + selectedIndex;
   document.getElementById('previousCloseIndex').innerHTML = "Previous Close: $" + indexJSON[selectedIndex].previous_close.toFixed(2);
