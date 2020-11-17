@@ -1,7 +1,7 @@
 # CS6242-group-project
 
 # Run application
-A Python or Python3 installtion is required to run the application.
+A Python or Python3 installation is required to run the application.
 Navigate into the stock-picker-app folder and use the built-in Python web server to run the application.
 
 ```bash
