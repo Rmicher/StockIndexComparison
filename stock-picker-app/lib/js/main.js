@@ -215,9 +215,7 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
           portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
           var stockNumber = listOfSelectedStocks.length - 1
           AddStockDetailsGrid(selectedStock, percentageValue, stockNumber);
-          console.log(listOfSelectedStocks)
           rankedIndices = rankIndices(listOfSelectedStocks, listOfIndexes);
-          console.log(rankedIndices)
           createIndexDropdown(rankedIndices);
           updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
         }
