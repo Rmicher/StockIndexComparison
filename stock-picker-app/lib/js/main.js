@@ -169,6 +169,7 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
     data.forEach(function (stock) {
       if (stock.ticker == selectedStock) {
         document.getElementById('symbol').innerHTML = "Symbol: " + stock.ticker;
+		document.getElementById('logoUrl').innerHTML = "Logo: " + "<img src="+stock.logo_url+">";
         document.getElementById('previousClose').innerHTML = "Previous Close: $" + parseFloat(stock.previous_close).toFixed(2);
         document.getElementById('beta').innerHTML = "Beta: " + parseFloat(stock.beta).toFixed(2);
         document.getElementById('environmentScore').innerHTML = "Environment Score: " + parseFloat(stock.environmentScore).toFixed(2);
