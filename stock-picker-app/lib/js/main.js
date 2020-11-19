@@ -20,13 +20,13 @@ var orderedTickers = []
 var radarOptions = {}
 var dropdownIndex = document.getElementById("selectIndex");
 
-// Read and process index data
+// Read index data
 var listOfIndexes = [];
-d3.json("lib/data/Stocks_data.json", function (stockJSON) {
+d3.json("lib/data/Index_data.json", function (stockJSON) {
 	listOfIndexes = stockJSON
 })
 
-// Creates a stock details grid member and refreshes the radar graph with the new selected stock attributes\
+// Creates a stock details grid member and refreshes the radar graph with the new selected stock attributes
 var stockNumberArray = ["stock0", "stock1", "stock2", "stock3", "stock4"]
 var buttonNumberArray = ["button0", "button1", "button2", "button3", "button4"]
 function AddStockDetailsGrid(selectedStock, percentageValue, stockNumber) {
@@ -36,8 +36,12 @@ function AddStockDetailsGrid(selectedStock, percentageValue, stockNumber) {
     + "'>Remove</button>";
 
   var button = document.getElementById(buttonNumberArray[stockNumber]);
-  stock.style.visibility = "visible";
   document.getElementById(buttonNumberArray[stockNumber]).onclick = onClickRemoveFromPortfolioButton;
+
+  for (var i=0; i < stockNumber; i++) {
+  	var prevButton = document.getElementById(buttonNumberArray[i]);
+  	prevButton.style.visibility = "hidden";
+  }
 }
 
 // Remove stock from portfolio if button clicked
@@ -45,6 +49,16 @@ function onClickRemoveFromPortfolioButton() {
   var stockNumber = parseInt(this.id.charAt(6))
   var stock = document.getElementById(stockNumberArray[stockNumber]);
   stock.style.visibility = "hidden";
+  var button = document.getElementById(buttonNumberArray[stockNumber]);
+  button.style.visibility = "hidden";
+  var prevButtonNumber = stockNumber - 1;
+  if (prevButtonNumber >= 0) {
+  	var prevButton = document.getElementById(buttonNumberArray[prevButtonNumber]);
+  	prevButton.style.visibility = "visible";
+  } else {
+  	var prevButton = document.getElementById(buttonNumberArray[0])
+  	prevButton.style.visibility = "hidden";
+  }
   totalPercentage = totalPercentage - listOfSelectedStocks.slice(-1)[0].weight;
   portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
   listOfSelectedStocks.pop();
@@ -56,14 +70,19 @@ function onClickRemoveFromPortfolioButton() {
 function createIndexDropdown(rankedIndices) {
   dropdownIndex.innerHTML = "";
   // Append the index options to the dropdown
-  for (var i=0; i < rankedIndices.length; i++) {
-  	var index = rankedIndices[i][0];
+  for (var i=0; i < 10; i++) {
+  	var rankedIndex = rankedIndices[i][0];
     var option = document.createElement("option");
-    option.textContent = (i + 1) + ". " + indexJSON[index].ticker;
-    option.value = indexJSON[index].ticker;
-    dropdownIndex.appendChild(option);
-  }
-  showIndexDetails(rankedIndices[0][0]);
+    for (let index of listOfIndexes) {
+  		if (index.ticker == rankedIndex) {
+    		option.textContent = (i + 1) + ". " + index.ticker;
+    		option.value = index.ticker;
+    		dropdownIndex.appendChild(option);
+    		break;
+    	}
+    }
+	}
+	showIndexDetails(rankedIndices[0][0]);
 }
 
 // Event listener for the index dropdown
@@ -98,14 +117,19 @@ function updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOpt
 
 // Show details for the index
 function showIndexDetails(selectedIndex) {
-  document.getElementById('symbolIndex').innerHTML = "Symbol: " + selectedIndex;
-  document.getElementById('previousCloseIndex').innerHTML = "Previous Close: $" + indexJSON[selectedIndex].previous_close.toFixed(2);
-  document.getElementById('betaIndex').innerHTML = "Beta: " + indexJSON[selectedIndex].beta.toFixed(2);
-  document.getElementById('environmentScoreIndex').innerHTML = "Environment Score: " + indexJSON[selectedIndex].environmentScore.toFixed(2);
-  document.getElementById('governanceScoreIndex').innerHTML = "Governance Score: " + indexJSON[selectedIndex].governanceScore.toFixed(2);
-  document.getElementById('socialScoreIndex').innerHTML = "Social Score: " + indexJSON[selectedIndex].socialScore.toFixed(2);
-  document.getElementById('yieldIndex').innerHTML = "Yield: " + (indexJSON[selectedIndex].yield * 100).toFixed(2) + "%";
-  document.getElementById('ytdReturnIndex').innerHTML = "YTD Return: " + (indexJSON[selectedIndex].ytdReturn * 100).toFixed(2) + "%";
+	for (let index of listOfIndexes) {
+	  if (index.ticker == selectedIndex) {
+			  document.getElementById('symbolIndex').innerHTML = "Symbol: " + index.ticker;
+			  document.getElementById('previousCloseIndex').innerHTML = "Previous Close: $" + parseFloat(index.previous_close).toFixed(2);
+			  document.getElementById('betaIndex').innerHTML = "Beta: " + parseFloat(index.beta).toFixed(2);
+			  document.getElementById('environmentScoreIndex').innerHTML = "Environment Score: " + parseFloat(index.environmentScore).toFixed(2);
+			  document.getElementById('governanceScoreIndex').innerHTML = "Governance Score: " + parseFloat(index.governanceScore).toFixed(2);
+			  document.getElementById('socialScoreIndex').innerHTML = "Social Score: " + parseFloat(index.socialScore).toFixed(2);
+			  document.getElementById('yieldIndex').innerHTML = "Yield: " + (parseFloat(index.yield) * 100).toFixed(2) + "%";
+			  document.getElementById('ytdReturnIndex').innerHTML = "YTD Return: " + parseFloat(index.ytdReturn).toFixed(2) + "%";
+			  break;
+		}
+	}
 }
 
 /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
@@ -156,32 +180,35 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
   dropdown.addEventListener("input", onInput);
   function onInput() {
     selectedStock = this.value.toUpperCase();
-    tickerNamesOrdered.forEach(function (stock, index) {
+    for (let stock of tickerNamesOrdered) {
       if (selectedStock == stock) {
         showStockDetails(selectedStock);
+        break;
       }
-    });
+    };
   }
 
   // Show the stock details when selected in the dropdown
   function showStockDetails(selectedStock) {
-    data.forEach(function (stock) {
+  	for (let stock of data) {
       if (stock.ticker == selectedStock) {
         document.getElementById('symbol').innerHTML = "Symbol: " + stock.ticker;
-		document.getElementById('logoUrl').innerHTML = "Logo: " + "<img src="+stock.logo_url+">";
+        document.getElementById('logoUrl').innerHTML = "<img src="+stock.logo_url+">";
         document.getElementById('previousClose').innerHTML = "Previous Close: $" + parseFloat(stock.previous_close).toFixed(2);
         document.getElementById('beta').innerHTML = "Beta: " + parseFloat(stock.beta).toFixed(2);
         document.getElementById('environmentScore').innerHTML = "Environment Score: " + parseFloat(stock.environmentScore).toFixed(2);
         document.getElementById('governanceScore').innerHTML = "Governance Score: " + parseFloat(stock.governanceScore).toFixed(2);
         document.getElementById('socialScore').innerHTML = "Social Score: " + parseFloat(stock.socialScore).toFixed(2);
         document.getElementById('yield').innerHTML = "Yield: " + (parseFloat(stock.yield) * 100).toFixed(2) + "%";
-        document.getElementById('ytdReturn').innerHTML = "YTD Return: " + (parseFloat(stock.ytdReturn) * 100).toFixed(2) + "%";
-      }}) 
+        document.getElementById('ytdReturn').innerHTML = "YTD Return: " + parseFloat(stock.ytdReturn).toFixed(2) + "%";
+        break;
+      }
+    }
   }
 
-  // Add stock to radar graph and to bottom row of grid when button is clicked
+	// Add stock to radar graph and to bottom row of grid when button is clicked
   function onClickAddToPortfolioButton() {
-    data.forEach(function (stock) {
+  	for (let stock of data) {
       if (stock.ticker == selectedStock) {
         var stockAlreadyInPortfolio = false;
         var newStockJSON = stock;
@@ -189,12 +216,13 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
           percentageValue = parseInt(slider.value);
         }
         newStockJSON.weight = parseInt(percentageValue);
-        listOfSelectedStocks.forEach(function (stock, index) {
+        for (let stock of listOfSelectedStocks) {
           if (stock.ticker == selectedStock) {
             alert("This stock has already been added to the portfolio.");
             stockAlreadyInPortfolio = true;
+            break;
           }
-        });
+        };
 
           listOfSelectedStocks.forEach(function (stock, index) {
             var elementSelected = d3.selectAll('.stock').filter(function(d, i) {
@@ -220,8 +248,9 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
           createIndexDropdown(rankedIndices);
           updateRadar(selectedAxisTracker,formattedData,orderedTickers,radarOptions);
         }
+        break;
       }
-    })
+    }
   }
 
   var select = d3.select('body')
