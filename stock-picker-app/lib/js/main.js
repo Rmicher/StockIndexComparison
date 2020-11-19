@@ -9,9 +9,7 @@ slider.oninput = function () {
   percentageValue = parseInt(this.value);
 }
 
-// Add stock to radar graph and to bottom row of grid when button is clicked
 var listOfSelectedStocks = [];
-var listOfIndexes = [];
 var totalPercentage = 0; //cannot exceed 100
 var portfolio = document.getElementById('portfolio');
 var color = d3.scale.ordinal()
@@ -22,12 +20,13 @@ var orderedTickers = []
 var radarOptions = {}
 var dropdownIndex = document.getElementById("selectIndex");
 
-// Format index data
-for (var index in indexJSON) {
-  listOfIndexes.push(indexJSON[index]);
-}
+// Read and process index data
+var listOfIndexes = [];
+d3.json("lib/data/Stocks_data.json", function (stockJSON) {
+	listOfIndexes = stockJSON
+})
 
-// Creates a stock details grid member and refreshes the radar graph with the new selected stock attributes
+// Creates a stock details grid member and refreshes the radar graph with the new selected stock attributes\
 var stockNumberArray = ["stock0", "stock1", "stock2", "stock3", "stock4"]
 var buttonNumberArray = ["button0", "button1", "button2", "button3", "button4"]
 function AddStockDetailsGrid(selectedStock, percentageValue, stockNumber) {
@@ -180,6 +179,7 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
       }}) 
   }
 
+  // Add stock to radar graph and to bottom row of grid when button is clicked
   function onClickAddToPortfolioButton() {
     data.forEach(function (stock) {
       if (stock.ticker == selectedStock) {
