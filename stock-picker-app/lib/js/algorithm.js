@@ -67,7 +67,7 @@ function calculatePortfolioAverages(portfolio){
 	portfolioAverages = {};
 	for (var i=0; i < attributes.length; i++){
 		attribute = attributes[i];
-		if (attribute != "ticker" && attribute != "weight" && attribute != "trailingPE") {
+		if (attribute != "ticker" && attribute != "weight" && attribute != "logo_url") {
 			attributeWeightedAverage = 0;
 			for (var j=0; j < portfolio.length; j++){
 				weighting = portfolio[j]["weight"]
