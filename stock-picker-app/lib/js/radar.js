@@ -6,6 +6,8 @@
 /////////////////////////////////////////////////////////
 var colorrange = d3.scale.ordinal()
   .range(["#EDC951", "#CC333F", "#FFFFFF", "#1FD56C", "#BD7AFF"]);
+  var color = d3.scale.ordinal()
+  .range(["#EDC951", "#CC333F", "#FFFFFF", "#1FD56C", "#BD7AFF"]);
 
 function RadarChart(id, data, options) {
 	var cfg = {
@@ -14,7 +16,7 @@ function RadarChart(id, data, options) {
 	 margin: {top: 70, right: 100, bottom: 75, left: 120}, //The margins of the SVG
 	 levels: 3,				//How many levels or inner circles should there be drawn
 	 maxValue: 0, 			//What is the value that the biggest circle will represent
-	 labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
+	 labelFactor: 1.2, 	//How much farther than the radius of the outer circle should the labels be placed
 	 wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
 	 opacityArea: 0.35, 	//The opacity of the area of the blob
 	 dotRadius: 4, 			//The size of the colored circles of each blog
@@ -33,17 +35,49 @@ function RadarChart(id, data, options) {
     
 	//If the supplied maxValue is smaller than the actual one, replace by the max in the data
 	var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
-	var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
+	var toggles = d3.select(".toggle").selectAll(".toggleButton")
+	var toggleValues = d3.selectAll(".toggleButton")[0].map(function(d) {
+		var on = d.textContent.includes("On")
+		if (on) {
+		  return d.textContent.toLowerCase().split(" ")[0]
+		}
+	  }).filter(function(x) {
+		 return x !== undefined;
+	  })
+	// debugger;
+	// var allAxis = (data[0].map(function(i, j){return i.axis}))	//Names of each axis
+
+	var allAxis = (data[0].map(function(i, j){
+		for (k in toggleValues) {
+			if (i.axis.includes(toggleValues[k])) {
+				return i.axis
+			}
+		}
+	})).filter(function(x) {
+		return x !== undefined;
+	 })
+	//  debugger;
+	 	//Names of each axis
 		total = allAxis.length,					//The number of different axes
 		radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
 		Format = d3.format('%'),			 	//Percentage formatting
         angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
-        
+	
+	var specialDataOverall = []
+	var k = data.forEach(function(p) {
+		var specialDataAxis = []
+		p.forEach(function(d) {
+			if (allAxis.includes(d.axis)) {
+				specialDataAxis.push(d)
+			}
+		})
+		specialDataOverall.push(specialDataAxis)
+	})
+	data = specialDataOverall
 	//Scale for the radius
 	// var rScale = d3.scale.linear()
 	// 	.range([0, radius])
 	// 	.domain([0, maxValue]);
-
 	var minmax = {
 		"previous_close": {
 			"maximum": 785
@@ -58,10 +92,10 @@ function RadarChart(id, data, options) {
 			"maximum": 0.18
 		},
 		"socialScore": {
-			"maximum": 24
+			"maximum": 28
 		},
 		"governanceScore": {
-			"maximum": 18
+			"maximum": 28
 		},
 		"environmentScore": {
 			"maximum": 28
@@ -153,10 +187,10 @@ function RadarChart(id, data, options) {
 		.attr("x1", 0)
 		.attr("y1", 0)
 		.attr("x2", function(d, i){ 
-			var scaler = minmax[d]["scale"]
+
 			return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
 		.attr("y2", function(d, i){ 
-			var scaler = minmax[d]["scale"]
+
 			return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
 		.attr("class", "line")
 		.style("stroke", "white")
@@ -166,13 +200,13 @@ function RadarChart(id, data, options) {
 	axis.append("text")
 		.attr("class", "legend")
 		.style("font-size", "18px")
-		.attr("text-anchor", "middle")
-		.attr("dy", "0.35em")
+		.attr("text-anchor", "top-left")
+		.attr("dy", "0.0em")
 		.attr("x", function(d, i){
-			var scaler = minmax[d]["scale"]
+
 			return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
 		.attr("y", function(d, i){
-			var scaler = minmax[d]["scale"]
+
 			return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
 		.text(function(d){
 			var clean = d.replace("Score"," Score")

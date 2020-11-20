@@ -20,6 +20,8 @@ var orderedTickers = []
 var radarOptions = {}
 var dropdownIndex = document.getElementById("selectIndex");
 
+
+
 // Read index data
 var listOfIndexes = [];
 d3.json("lib/data/Index_data.json", function (stockJSON) {
@@ -237,7 +239,7 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
             var elementSelected = d3.selectAll('.stock').filter(function(d, i) {
               return index == i
             })
-              elementSelected.style('color', color(index-1)).select('text').text(stock.ticker);
+              elementSelected.style('color', color(index)).select('text').text(stock.ticker);
             })
           portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
           var stockNumber = listOfSelectedStocks.length - 1
@@ -254,8 +256,6 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
   var select = d3.select('body')
     .select('#selectStock')
     .attr('class', 'select')
-  var color = d3.scale.ordinal()
-    .range(["#EDC951", "#CC333F", "#FFFFFF", "#1FD56C", "#BD7AFF"]);
 
   var options = select
     .selectAll('option')
@@ -268,7 +268,56 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
 
   var allAxis = (dataformatted[0].map(function (i, j) { return i.axis }))
 
+
+
   d3.select('body').select("#AddToPortfolioButton").on('click', onClickAddToPortfolioButton);
+  function toggles(b) {
+    if (b.text().includes("On")) {
+      b.text(b.text().split(" ")[0].concat(" Off"))
+      b.style("color","red")
+    } else {
+      b.text(b.text().split(" ")[0].concat(" On"))
+      b.style("color","blue")
+    }
+  }
+  var radarChartOptions = {
+    w: width,
+    h: height,
+    margin: margin,
+    maxValue: 0.5,
+    levels: 5,
+    roundStrokes: true,
+    color: color
+  };
+
+  function tog1() {
+    toggles(d3.select('body').select("#b1"))
+    updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOptions)
+  }
+  function tog2() {
+    toggles(d3.select('body').select("#b2"))
+    updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOptions)
+  }
+  function tog3() {
+    toggles(d3.select('body').select("#b3"))
+    updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOptions)
+  }
+  function tog4() {
+    toggles(d3.select('body').select("#b4"))
+    updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOptions)
+  }
+  function tog5() {
+    toggles(d3.select('body').select("#b5"))
+    updateRadar(selectedAxis,dataformatted,tickerNamesOrdered,radarChartOptions)
+  }
+  d3.select('body').select("#b1").on("click", tog1);
+  d3.select('body').select("#b2").on("click", tog2);
+  d3.select('body').select("#b3").on("click", tog3);
+  d3.select('body').select("#b4").on("click", tog4);
+  d3.select('body').select("#b5").on("click", tog5);
+  var color = d3.scale.ordinal()
+  .range(["#EDC951", "#CC333F", "#FFFFFF", "#1FD56C", "#BD7AFF"]);
+  // debugger;
 
   // var selectAxis = d3.select('body')
   //   .select("#selectFactors")
@@ -295,16 +344,7 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
   //////////////////// Draw the Chart ////////////////////////// 
   ////////////////////////////////////////////////////////////// 
 
-
-  var radarChartOptions = {
-    w: width,
-    h: height,
-    margin: margin,
-    maxValue: 0.5,
-    levels: 5,
-    roundStrokes: true,
-    color: color
-  };
   //Call function to draw the Radar chart
   RadarChart(".radarchart", dataformatted, radarChartOptions);
+
 })
