@@ -13,7 +13,7 @@ function RadarChart(id, data, options) {
 	 h: 500,				//Height of the circle
 	 margin: {top: 70, right: 100, bottom: 25, left: 100}, //The margins of the SVG
 	 levels: 3,				//How many levels or inner circles should there be drawn
-	 maxValue: 10, 			//What is the value that the biggest circle will represent
+	 maxValue: 0, 			//What is the value that the biggest circle will represent
 	 labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
 	 wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
 	 opacityArea: 0.35, 	//The opacity of the area of the blob
@@ -136,7 +136,7 @@ function RadarChart(id, data, options) {
 	   .attr("dy", "0.4em")
 	   .style("font-size", "10px")
 	   .attr("fill", "#737373")
-	   .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
+	   .text(function(d,i) { return Format(d/cfg.levels); });
 
 	/////////////////////////////////////////////////////////
 	//////////////////// Draw the axes //////////////////////
