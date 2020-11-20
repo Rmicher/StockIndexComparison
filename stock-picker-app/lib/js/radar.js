@@ -62,12 +62,22 @@ function RadarChart(id, data, options) {
 		radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
 		Format = d3.format('%'),			 	//Percentage formatting
         angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
-        
+	
+	var specialDataOverall = []
+	var k = data.forEach(function(p) {
+		var specialDataAxis = []
+		p.forEach(function(d) {
+			if (allAxis.includes(d.axis)) {
+				specialDataAxis.push(d)
+			}
+		})
+		specialDataOverall.push(specialDataAxis)
+	})
+	data = specialDataOverall
 	//Scale for the radius
 	// var rScale = d3.scale.linear()
 	// 	.range([0, radius])
 	// 	.domain([0, maxValue]);
-
 	var minmax = {
 		"previous_close": {
 			"maximum": 785
@@ -82,10 +92,10 @@ function RadarChart(id, data, options) {
 			"maximum": 0.18
 		},
 		"socialScore": {
-			"maximum": 24
+			"maximum": 28
 		},
 		"governanceScore": {
-			"maximum": 18
+			"maximum": 28
 		},
 		"environmentScore": {
 			"maximum": 28
