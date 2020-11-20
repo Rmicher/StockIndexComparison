@@ -274,8 +274,10 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
   function toggles(b) {
     if (b.text().includes("On")) {
       b.text(b.text().split(" ")[0].concat(" Off"))
+      b.style("color","red")
     } else {
       b.text(b.text().split(" ")[0].concat(" On"))
+      b.style("color","blue")
     }
   }
   var radarChartOptions = {
