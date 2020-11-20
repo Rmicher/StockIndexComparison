@@ -315,6 +315,8 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
   d3.select('body').select("#b3").on("click", tog3);
   d3.select('body').select("#b4").on("click", tog4);
   d3.select('body').select("#b5").on("click", tog5);
+  var color = d3.scale.ordinal()
+  .range(["#EDC951", "#CC333F", "#FFFFFF", "#1FD56C", "#BD7AFF"]);
   // debugger;
 
   // var selectAxis = d3.select('body')
