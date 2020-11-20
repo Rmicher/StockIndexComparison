@@ -102,3 +102,7 @@
 .form-attribute {
   padding-bottom: 10px;
 }
+
+body {
+  font-family: sans-serif;
+}
