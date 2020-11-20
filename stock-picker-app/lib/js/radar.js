@@ -11,7 +11,7 @@ function RadarChart(id, data, options) {
 	 h: 500,				//Height of the circle
 	 margin: {top: 70, right: 100, bottom: 25, left: 100}, //The margins of the SVG
 	 levels: 3,				//How many levels or inner circles should there be drawn
-	 maxValue: 0, 			//What is the value that the biggest circle will represent
+	 maxValue: 10, 			//What is the value that the biggest circle will represent
 	 labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
 	 wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
 	 opacityArea: 0.35, 	//The opacity of the area of the blob
@@ -38,10 +38,46 @@ function RadarChart(id, data, options) {
         angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
         
 	//Scale for the radius
+	// var rScale = d3.scale.linear()
+	// 	.range([0, radius])
+	// 	.domain([0, maxValue]);
+
+	var minmax = {
+		"previous_close": {
+			"maximum": 785
+		},
+		"beta": {
+			"maximum": 5
+		},
+		"ytdReturn": {
+			"maximum": 140
+		},
+		"yield": {
+			"maximum": 0.18
+		},
+		"socialScore": {
+			"maximum": 24
+		},
+		"governanceScore": {
+			"maximum": 18
+		},
+		"environmentScore": {
+			"maximum": 28
+		}
+		}
+
 	var rScale = d3.scale.linear()
 		.range([0, radius])
 		.domain([0, maxValue]);
-		
+
+	for (i in minmax) {
+		var maxvalitem = minmax[i].maximum
+		var rscale = d3.scale.linear()
+		.range([0, radius])
+		.domain([0, maxvalitem]);
+		minmax[i]["scale"] = rscale
+		}
+	// for (i in minmax.keys()):
 	/////////////////////////////////////////////////////////
 	//////////// Create the container SVG and g /////////////
 	/////////////////////////////////////////////////////////
@@ -114,8 +150,12 @@ function RadarChart(id, data, options) {
 	axis.append("line")
 		.attr("x1", 0)
 		.attr("y1", 0)
-		.attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
-		.attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
+		.attr("x2", function(d, i){ 
+			var scaler = minmax[d]["scale"]
+			return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
+		.attr("y2", function(d, i){ 
+			var scaler = minmax[d]["scale"]
+			return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
 		.attr("class", "line")
 		.style("stroke", "white")
 		.style("stroke-width", "2px");
@@ -126,8 +166,12 @@ function RadarChart(id, data, options) {
 		.style("font-size", "11px")
 		.attr("text-anchor", "middle")
 		.attr("dy", "0.35em")
-		.attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
-		.attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
+		.attr("x", function(d, i){
+			var scaler = minmax[d]["scale"]
+			return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
+		.attr("y", function(d, i){
+			var scaler = minmax[d]["scale"]
+			return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
 		.text(function(d){return d})
 		.call(wrap, cfg.wrapWidth);
 
@@ -138,7 +182,9 @@ function RadarChart(id, data, options) {
 	//The radial line function
 	var radarLine = d3.svg.line.radial()
 		.interpolate("linear-closed")
-		.radius(function(d) { return rScale(d.value); })
+		.radius(function(d) { 
+			var scaler = minmax[d.axis]["scale"]
+			return scaler(d.value); })
 		.angle(function(d,i) {	return i*angleSlice; });
 		
 	if(cfg.roundStrokes) {
@@ -189,9 +235,13 @@ function RadarChart(id, data, options) {
 		.data(function(d,i) { return d; })
 		.enter().append("circle")
 		.attr("class", "radarCircle")
-		.attr("r", cfg.dotRadius)
-		.attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-		.attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+		.attr("r", cfg.dotRadius);
+		blobWrapper.attr("cx", function(d,i){ 
+			var scaler = minmax[d.axis]["scale"]
+			return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+		.attr("cy", function(d,i){ 
+			var scaler = minmax[d.axis]["scale"]
+			return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
 		.style("fill", function(d,i,j) { return cfg.color(j); })
 		.style("fill-opacity", 0.8);
 
@@ -211,8 +261,12 @@ function RadarChart(id, data, options) {
 		.enter().append("circle")
 		.attr("class", "radarInvisibleCircle")
 		.attr("r", cfg.dotRadius*1.5)
-		.attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-		.attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+		.attr("cx", function(d,i){ 
+			var scaler = minmax[d.axis]["scale"]
+			return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+		.attr("cy", function(d,i){ 
+			var scaler = minmax[d.axis]["scale"]
+			return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
 		.style("fill", "none")
 		.style("pointer-events", "all")
 		.on("mouseover", function(d,i) {
