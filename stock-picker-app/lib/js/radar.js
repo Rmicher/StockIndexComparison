@@ -4,7 +4,9 @@
 ////////////////// VisualCinnamon.com ///////////////////
 /////////// Inspired by the code of alangrafu ///////////
 /////////////////////////////////////////////////////////
-	
+var colorrange = d3.scale.ordinal()
+  .range(["#EDC951", "#CC333F", "#FFFFFF", "#1FD56C", "#BD7AFF"]);
+
 function RadarChart(id, data, options) {
 	var cfg = {
 	 w: 500,				//Width of the circle
@@ -19,7 +21,7 @@ function RadarChart(id, data, options) {
 	 opacityCircles: 0.1, 	//The opacity of the circles of each blob
 	 strokeWidth: 2, 		//The width of the stroke around each blob
 	 roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
-	 color: d3.scale.category10()	//Color function
+	 color: colorrange	//Color function
 	};
 	
 	//Put all of the options into a variable called cfg

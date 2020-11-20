@@ -224,13 +224,6 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
           }
         };
 
-          listOfSelectedStocks.forEach(function (stock, index) {
-            var elementSelected = d3.selectAll('.stock').filter(function(d, i) {
-              return index == i
-            })
-              elementSelected.style('color', color(index-1)).select('text').text(stock.ticker);
-            })
-
         if (stockAlreadyInPortfolio) {
           return;
         }
@@ -240,7 +233,12 @@ d3.json("lib/data/Stocks_data.json", function (stockJSON) {
         } else {
           totalPercentage = totalPercentage + percentageValue;
           listOfSelectedStocks.push(newStockJSON);
-
+          listOfSelectedStocks.forEach(function (stock, index) {
+            var elementSelected = d3.selectAll('.stock').filter(function(d, i) {
+              return index == i
+            })
+              elementSelected.style('color', color(index-1)).select('text').text(stock.ticker);
+            })
           portfolio.innerHTML = "Portfolio " + totalPercentage + "% Allocated";
           var stockNumber = listOfSelectedStocks.length - 1
           AddStockDetailsGrid(selectedStock, percentageValue, stockNumber);
